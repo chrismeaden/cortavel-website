@@ -943,7 +943,8 @@
         </div>
 
         <div class="contact-right reveal">
-          <form class="contact-form" onsubmit="handleSubmit(event)">
+          <form class="contact-form" name="cortavel-enquiry" method="POST" data-netlify="true" action="/success.html">
+            <input type="hidden" name="form-name" value="cortavel-enquiry">
             <div class="form-row">
               <div class="form-group">
                 <label>First Name</label>
@@ -997,7 +998,7 @@
     <div class="footer-inner">
       <div class="footer-logo">COR<span>TAVEL</span></div>
       <div class="footer-meta">
-        CORTAVEL v2.0 · Framework for Agentic AI Governance<br>
+        CORTAVEL v2.0.2 · Framework for Agentic AI Governance<br>
         Protocol-agnostic · Board-ready · Auditable by design<br>
         © 2026 CORTAVEL. All rights reserved.
       </div>
