@@ -1,0 +1,1044 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CORTAVEL — Framework for Agentic AI Governance</title>
+  <meta name="description" content="The governance standard for AI you can't see. CORTAVEL is a multi-protocol governance framework for agentic AI — designed for boards, executives, and regulators.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=DM+Mono:wght@300;400;500&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy:    #0D1B2E;
+      --navy-mid:#13243D;
+      --navy-lt: #1C3050;
+      --gold:    #C49A3C;
+      --gold-lt: #E2B96A;
+      --gold-dim:#8A6B28;
+      --cream:   #F5EFE4;
+      --cream-dk:#DDD4C3;
+      --slate:   #8FA3BC;
+      --slate-lt:#B8CADE;
+      --white:   #FFFFFF;
+      --rule:    rgba(196,154,60,0.25);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--navy);
+      color: var(--cream);
+      font-family: 'Instrument Sans', sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ── NOISE TEXTURE OVERLAY ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 1000;
+      opacity: 0.4;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 0 4vw;
+      height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(13,27,46,0.85);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--rule);
+      transition: background 0.3s;
+    }
+
+    .nav-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.5rem;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      color: var(--white);
+      text-decoration: none;
+    }
+
+    .nav-logo span { color: var(--gold); }
+
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+      list-style: none;
+      align-items: center;
+    }
+
+    .nav-links a {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--slate-lt);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--gold-lt); }
+
+    .nav-cta {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--navy) !important;
+      background: var(--gold);
+      padding: 0.5rem 1.2rem;
+      text-decoration: none;
+      transition: background 0.2s !important;
+    }
+    .nav-cta:hover { background: var(--gold-lt) !important; color: var(--navy) !important; }
+
+    /* ── HERO ── */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 0 4vw 8vh;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-grid-bg {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(196,154,60,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(196,154,60,0.04) 1px, transparent 1px);
+      background-size: 80px 80px;
+      mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 80%);
+    }
+
+    .hero-glow {
+      position: absolute;
+      width: 800px; height: 800px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(196,154,60,0.08) 0%, transparent 70%);
+      top: -200px; right: -200px;
+      pointer-events: none;
+    }
+
+    .hero-eyebrow {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1.5rem;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.2s forwards;
+    }
+
+    .hero-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(4rem, 10vw, 9rem);
+      font-weight: 300;
+      line-height: 0.9;
+      letter-spacing: -0.02em;
+      color: var(--white);
+      margin-bottom: 0.2rem;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.35s forwards;
+    }
+
+    .hero-title em {
+      font-style: italic;
+      color: var(--gold-lt);
+    }
+
+    .hero-subtitle {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1rem, 2vw, 1.4rem);
+      font-weight: 300;
+      font-style: italic;
+      color: var(--slate-lt);
+      margin-bottom: 3rem;
+      max-width: 640px;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.5s forwards;
+    }
+
+    .hero-rule {
+      width: 80px;
+      height: 2px;
+      background: var(--gold);
+      margin-bottom: 2rem;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.65s forwards;
+    }
+
+    .hero-body {
+      max-width: 520px;
+      font-size: 1rem;
+      color: var(--slate-lt);
+      line-height: 1.75;
+      margin-bottom: 3rem;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.75s forwards;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 1.5rem;
+      align-items: center;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.9s forwards;
+    }
+
+    .btn-primary {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.72rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--navy);
+      background: var(--gold);
+      padding: 0.9rem 2.2rem;
+      text-decoration: none;
+      display: inline-block;
+      transition: background 0.2s, transform 0.2s;
+    }
+    .btn-primary:hover { background: var(--gold-lt); transform: translateY(-1px); }
+
+    .btn-secondary {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.72rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--slate-lt);
+      text-decoration: none;
+      border-bottom: 1px solid var(--rule);
+      padding-bottom: 2px;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .btn-secondary:hover { color: var(--gold-lt); border-color: var(--gold-lt); }
+
+    .hero-scroll {
+      position: absolute;
+      bottom: 2.5rem;
+      right: 4vw;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--slate);
+      writing-mode: vertical-rl;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      opacity: 0;
+      animation: fadeUp 0.8s 1.2s forwards;
+    }
+    .hero-scroll::after {
+      content: '';
+      width: 1px;
+      height: 60px;
+      background: linear-gradient(to bottom, var(--gold), transparent);
+    }
+
+    /* ── SECTIONS ── */
+    section {
+      padding: 8rem 4vw;
+      position: relative;
+    }
+
+    .section-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1.2rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .section-label::before {
+      content: '';
+      width: 32px;
+      height: 1px;
+      background: var(--gold);
+    }
+
+    .section-heading {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.4rem, 5vw, 4rem);
+      font-weight: 300;
+      line-height: 1.1;
+      color: var(--white);
+      margin-bottom: 1.5rem;
+    }
+
+    .section-heading em {
+      font-style: italic;
+      color: var(--gold-lt);
+    }
+
+    /* ── PROBLEM SECTION ── */
+    #problem {
+      background: var(--navy-mid);
+      border-top: 1px solid var(--rule);
+      border-bottom: 1px solid var(--rule);
+    }
+
+    .problem-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6rem;
+      align-items: start;
+      margin-top: 4rem;
+    }
+
+    .problem-left p {
+      font-size: 1.05rem;
+      color: var(--slate-lt);
+      line-height: 1.8;
+      margin-bottom: 1.5rem;
+    }
+
+    .problem-left p strong {
+      color: var(--cream);
+      font-weight: 500;
+    }
+
+    .problem-right {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .gap-item {
+      padding: 1.8rem 0;
+      border-bottom: 1px solid var(--rule);
+      display: grid;
+      grid-template-columns: 48px 1fr;
+      gap: 1.5rem;
+      align-items: start;
+    }
+    .gap-item:first-child { border-top: 1px solid var(--rule); }
+
+    .gap-num {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem;
+      color: var(--gold-dim);
+      letter-spacing: 0.1em;
+      padding-top: 4px;
+    }
+
+    .gap-title {
+      font-family: 'Instrument Sans', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--cream);
+      margin-bottom: 0.4rem;
+      letter-spacing: 0.02em;
+    }
+
+    .gap-desc {
+      font-size: 0.88rem;
+      color: var(--slate);
+      line-height: 1.7;
+    }
+
+    /* ── FRAMEWORK SECTION ── */
+    #framework {
+      background: var(--navy);
+    }
+
+    .framework-intro {
+      max-width: 640px;
+      margin-bottom: 5rem;
+    }
+
+    .framework-intro p {
+      font-size: 1.05rem;
+      color: var(--slate-lt);
+      line-height: 1.8;
+      margin-top: 1.5rem;
+    }
+
+    .domains-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--rule);
+      border: 1px solid var(--rule);
+    }
+
+    .domain-card {
+      background: var(--navy);
+      padding: 2.5rem 2rem;
+      position: relative;
+      transition: background 0.3s;
+      overflow: hidden;
+    }
+
+    .domain-card:hover { background: var(--navy-mid); }
+
+    .domain-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: var(--gold);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.4s ease;
+    }
+    .domain-card:hover::before { transform: scaleX(1); }
+
+    .domain-num {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      color: var(--gold-dim);
+      margin-bottom: 1.2rem;
+    }
+
+    .domain-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--white);
+      margin-bottom: 1rem;
+      line-height: 1.2;
+    }
+
+    .domain-desc {
+      font-size: 0.88rem;
+      color: var(--slate);
+      line-height: 1.75;
+    }
+
+    .domain-card.wide {
+      grid-column: span 2;
+    }
+
+    /* ── ABOUT SECTION ── */
+    #about {
+      background: var(--navy-mid);
+      border-top: 1px solid var(--rule);
+      border-bottom: 1px solid var(--rule);
+    }
+
+    .about-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6rem;
+      align-items: center;
+      margin-top: 4rem;
+    }
+
+    .about-left p {
+      font-size: 1.05rem;
+      color: var(--slate-lt);
+      line-height: 1.8;
+      margin-bottom: 1.5rem;
+    }
+
+    .about-left p strong { color: var(--cream); font-weight: 500; }
+
+    .comparison-table {
+      border: 1px solid var(--rule);
+    }
+
+    .comp-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      border-bottom: 1px solid var(--rule);
+    }
+    .comp-row:last-child { border-bottom: none; }
+
+    .comp-cell {
+      padding: 1.1rem 1.5rem;
+      font-size: 0.88rem;
+    }
+
+    .comp-header .comp-cell {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      background: var(--navy-lt);
+      color: var(--slate);
+    }
+
+    .comp-row:not(.comp-header) .comp-cell:first-child {
+      color: var(--slate);
+      border-right: 1px solid var(--rule);
+    }
+    .comp-row:not(.comp-header) .comp-cell:last-child {
+      color: var(--cream);
+    }
+
+    .badge {
+      display: inline-block;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 0.2rem 0.6rem;
+      border: 1px solid var(--gold-dim);
+      color: var(--gold);
+      margin-right: 0.5rem;
+      margin-bottom: 0.4rem;
+    }
+
+    .badges { margin-top: 2rem; }
+
+    /* ── CONTACT SECTION ── */
+    #contact {
+      background: var(--navy);
+    }
+
+    .contact-layout {
+      display: grid;
+      grid-template-columns: 1fr 1.2fr;
+      gap: 6rem;
+      align-items: start;
+      margin-top: 4rem;
+    }
+
+    .contact-left p {
+      font-size: 1rem;
+      color: var(--slate-lt);
+      line-height: 1.8;
+      margin-bottom: 1.5rem;
+    }
+
+    .contact-details {
+      margin-top: 2.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .contact-item {
+      display: flex;
+      gap: 1.2rem;
+      align-items: baseline;
+    }
+
+    .contact-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--gold-dim);
+      min-width: 80px;
+    }
+
+    .contact-value {
+      font-size: 0.92rem;
+      color: var(--slate-lt);
+    }
+    .contact-value a { color: var(--gold-lt); text-decoration: none; }
+    .contact-value a:hover { color: var(--white); }
+
+    .contact-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+    }
+
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .form-group label {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.63rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--slate);
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      background: var(--navy-mid);
+      border: 1px solid rgba(143,163,188,0.2);
+      color: var(--cream);
+      font-family: 'Instrument Sans', sans-serif;
+      font-size: 0.9rem;
+      padding: 0.8rem 1rem;
+      outline: none;
+      transition: border-color 0.2s;
+      appearance: none;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      border-color: var(--gold-dim);
+    }
+
+    .form-group input::placeholder,
+    .form-group textarea::placeholder { color: var(--slate); }
+
+    .form-group select { cursor: pointer; }
+    .form-group select option { background: var(--navy-mid); }
+
+    .form-group textarea { resize: vertical; min-height: 120px; }
+
+    .form-submit {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.72rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--navy);
+      background: var(--gold);
+      border: none;
+      padding: 1rem 2.5rem;
+      cursor: pointer;
+      transition: background 0.2s;
+      align-self: flex-start;
+    }
+    .form-submit:hover { background: var(--gold-lt); }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--navy-mid);
+      border-top: 1px solid var(--rule);
+      padding: 3rem 4vw;
+    }
+
+    .footer-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .footer-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.3rem;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      color: var(--white);
+    }
+    .footer-logo span { color: var(--gold); }
+
+    .footer-meta {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.62rem;
+      letter-spacing: 0.1em;
+      color: var(--slate);
+      text-align: right;
+      line-height: 1.8;
+    }
+
+    /* ── DIVIDER ── */
+    .gold-rule {
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      opacity: 0.3;
+      margin: 0;
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .problem-layout,
+      .about-layout,
+      .contact-layout { grid-template-columns: 1fr; gap: 3rem; }
+
+      .domains-grid { grid-template-columns: 1fr; }
+      .domain-card.wide { grid-column: span 1; }
+
+      .form-row { grid-template-columns: 1fr; }
+
+      .nav-links { display: none; }
+
+      .footer-inner { flex-direction: column; gap: 1.5rem; text-align: center; }
+      .footer-meta { text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="#hero" class="nav-logo">COR<span>TAVEL</span></a>
+    <ul class="nav-links">
+      <li><a href="#problem">The Gap</a></li>
+      <li><a href="#framework">Framework</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#contact" class="nav-cta">Enquire</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section id="hero">
+    <div class="hero-grid-bg"></div>
+    <div class="hero-glow"></div>
+
+    <div class="hero-eyebrow">Governance Framework — v2.0</div>
+
+    <h1 class="hero-title">
+      COR<em>TAVEL</em>
+    </h1>
+
+    <p class="hero-subtitle">
+      Coordinated Oversight Regime for Trusted Agentic Verification and Escalation Limits
+    </p>
+
+    <div class="hero-rule"></div>
+
+    <p class="hero-body">
+      Boards and investors are authorising AI that acts autonomously. CORTAVEL is the governance standard that makes autonomous AI accountable — protocol-agnostic, auditable by design, and built for the boardroom.
+    </p>
+
+    <div class="hero-actions">
+      <a href="#framework" class="btn-primary">Explore the Framework</a>
+      <a href="#contact" class="btn-secondary">Request a Briefing</a>
+    </div>
+
+    <div class="hero-scroll">Scroll</div>
+  </section>
+
+  <div class="gold-rule"></div>
+
+  <!-- PROBLEM -->
+  <section id="problem">
+    <div class="section-inner">
+      <div class="section-label">The Governance Gap</div>
+      <h2 class="section-heading reveal">Existing frameworks<br><em>don't govern agents.</em></h2>
+
+      <div class="problem-layout">
+        <div class="problem-left reveal">
+          <p>
+            Boards are being asked to sign off on AI systems that <strong>act without asking</strong> — initiating processes, making decisions, and escalating tasks autonomously across enterprise operations.
+          </p>
+          <p>
+            COSO governs financial controls. ISO 27001 governs information security. The EU AI Act governs high-risk classifications. <strong>None of them govern what happens when an AI agent takes autonomous action</strong> on behalf of your organisation.
+          </p>
+          <p>
+            The result: organisations can demonstrate their AI is deployed, but not that it is <strong>governable</strong>.
+          </p>
+        </div>
+
+        <div class="problem-right reveal">
+          <div class="gap-item">
+            <div class="gap-num">01</div>
+            <div>
+              <div class="gap-title">No delegation standard</div>
+              <div class="gap-desc">No framework defines who may instruct an agent, to what scope, or what authority chain makes an autonomous action attributable.</div>
+            </div>
+          </div>
+          <div class="gap-item">
+            <div class="gap-num">02</div>
+            <div>
+              <div class="gap-title">No escalation protocol</div>
+              <div class="gap-desc">Existing GRC tools have no concept of an agent that must pause, escalate, or abort based on decision-point risk.</div>
+            </div>
+          </div>
+          <div class="gap-item">
+            <div class="gap-num">03</div>
+            <div>
+              <div class="gap-title">No auditable intent layer</div>
+              <div class="gap-desc">Multi-agent pipelines produce no chain-of-custody for intent — regulators and auditors have nothing to examine.</div>
+            </div>
+          </div>
+          <div class="gap-item">
+            <div class="gap-num">04</div>
+            <div>
+              <div class="gap-title">No board attestation model</div>
+              <div class="gap-desc">Directors cannot sign a declaration about AI governance they don't have a framework to describe.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="gold-rule"></div>
+
+  <!-- FRAMEWORK -->
+  <section id="framework">
+    <div class="section-inner">
+      <div class="section-label">The Five Domains</div>
+      <h2 class="section-heading reveal">A governance regime<br><em>built for the agent layer.</em></h2>
+
+      <div class="framework-intro reveal">
+        <p>
+          CORTAVEL structures agentic AI governance across five interlocking domains. Each domain addresses a distinct accountability gap — together they form a complete, auditable regime that boards can attest to and regulators can examine.
+        </p>
+      </div>
+
+      <div class="domains-grid">
+        <div class="domain-card reveal">
+          <div class="domain-num">Domain 01</div>
+          <div class="domain-title">Delegation Authorisation</div>
+          <div class="domain-desc">Defines who may instruct an agent and to what scope. Establishes the chain of accountable principals for every autonomous action — making delegation explicit, not assumed.</div>
+        </div>
+
+        <div class="domain-card reveal">
+          <div class="domain-num">Domain 02</div>
+          <div class="domain-title">Escalation Thresholds</div>
+          <div class="domain-desc">Codified conditions under which an agent must pause, escalate, or abort. Prevents unchecked autonomous execution at high-consequence decision points across any architecture.</div>
+        </div>
+
+        <div class="domain-card reveal">
+          <div class="domain-num">Domain 03</div>
+          <div class="domain-title">Audit Trail Standards</div>
+          <div class="domain-desc">Minimum requirements for action logging, intent capture, and chain-of-custody across multi-agent pipelines. Designed to be produced in regulatory proceedings without further processing.</div>
+        </div>
+
+        <div class="domain-card reveal">
+          <div class="domain-num">Domain 04</div>
+          <div class="domain-title">Protocol Interoperability</div>
+          <div class="domain-desc">Governance applies across agent architectures, orchestration protocols, and vendor platforms. Not model-specific. Not tool-specific. Vendor-neutral by design.</div>
+        </div>
+
+        <div class="domain-card wide reveal">
+          <div class="domain-num">Domain 05</div>
+          <div class="domain-title">Board Attestation Model</div>
+          <div class="domain-desc">Translates technical compliance into board-level declarations. Enables CORTAVEL certification to be cited in annual reports, investor disclosures, and regulatory submissions — giving directors the language to govern what they've authorised. This domain is what distinguishes CORTAVEL from a technical standard: it is the bridge between the agent layer and the boardroom.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="gold-rule"></div>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="section-inner">
+      <div class="section-label">Who It's For</div>
+      <h2 class="section-heading reveal">Built for boards.<br><em>Readable by regulators.</em></h2>
+
+      <div class="about-layout">
+        <div class="about-left reveal">
+          <p>
+            CORTAVEL is designed for organisations that have moved beyond AI experimentation into <strong>enterprise-scale agentic deployment</strong> — and now need governance infrastructure to match.
+          </p>
+          <p>
+            Unlike developer-focused frameworks, CORTAVEL is written for the people accountable for what AI does: <strong>boards, audit committees, chief risk officers, and legal counsel</strong>. It is the governance layer between technical implementation and institutional accountability.
+          </p>
+          <p>
+            CORTAVEL-aligned organisations can demonstrate to investors and regulators not just that their AI is compliant, but that it is <strong>governable.</strong>
+          </p>
+
+          <div class="badges">
+            <span class="badge">OWASP Agentic Top 10</span>
+            <span class="badge">EU AI Act</span>
+            <span class="badge">GDPR Compatible</span>
+            <span class="badge">ISO 31000 Aligned</span>
+            <span class="badge">COSO Adjacent</span>
+          </div>
+        </div>
+
+        <div class="about-right reveal">
+          <div class="comparison-table">
+            <div class="comp-row comp-header">
+              <div class="comp-cell">Existing Frameworks</div>
+              <div class="comp-cell">CORTAVEL</div>
+            </div>
+            <div class="comp-row">
+              <div class="comp-cell">Governs data and software</div>
+              <div class="comp-cell">Governs intent, action, and delegation</div>
+            </div>
+            <div class="comp-row">
+              <div class="comp-cell">Point-in-time compliance</div>
+              <div class="comp-cell">Continuous operational governance</div>
+            </div>
+            <div class="comp-row">
+              <div class="comp-cell">Model or vendor-specific</div>
+              <div class="comp-cell">Protocol-agnostic across all architectures</div>
+            </div>
+            <div class="comp-row">
+              <div class="comp-cell">Technical audit artefacts</div>
+              <div class="comp-cell">Board-ready attestation declarations</div>
+            </div>
+            <div class="comp-row">
+              <div class="comp-cell">Reactive incident response</div>
+              <div class="comp-cell">Proactive escalation thresholds</div>
+            </div>
+            <div class="comp-row">
+              <div class="comp-cell">Silent on autonomous action</div>
+              <div class="comp-cell">Explicit accountability for every agent act</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="gold-rule"></div>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="section-inner">
+      <div class="section-label">Get in Touch</div>
+      <h2 class="section-heading reveal">Request a<br><em>framework briefing.</em></h2>
+
+      <div class="contact-layout">
+        <div class="contact-left reveal">
+          <p>
+            CORTAVEL is available for enterprise adoption, regulatory engagement, and board-level briefings.
+          </p>
+          <p>
+            If your organisation is deploying agentic AI and needs governance infrastructure that your board can stand behind, we'd like to speak with you.
+          </p>
+
+          <div class="contact-details">
+            <div class="contact-item">
+              <div class="contact-label">Domain</div>
+              <div class="contact-value">cortavel.com</div>
+            </div>
+            <div class="contact-item">
+              <div class="contact-label">Version</div>
+              <div class="contact-value">CORTAVEL v2.0 — February 2026</div>
+            </div>
+            <div class="contact-item">
+              <div class="contact-label">Register</div>
+              <div class="contact-value">CORTAVEL is available for trademark registration in Nice Class 42 and 35</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="contact-right reveal">
+          <form class="contact-form" onsubmit="handleSubmit(event)">
+            <div class="form-row">
+              <div class="form-group">
+                <label>First Name</label>
+                <input type="text" placeholder="Jane">
+              </div>
+              <div class="form-group">
+                <label>Last Name</label>
+                <input type="text" placeholder="Smith">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>Organisation</label>
+              <input type="text" placeholder="Acme Corporation">
+            </div>
+
+            <div class="form-group">
+              <label>Role</label>
+              <select>
+                <option value="" disabled selected>Select your role</option>
+                <option>Board Director / NED</option>
+                <option>Chief Risk Officer</option>
+                <option>Chief AI Officer</option>
+                <option>General Counsel</option>
+                <option>Audit Committee</option>
+                <option>Investor / Fund Manager</option>
+                <option>Regulator / Policy</option>
+                <option>Other</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>Email</label>
+              <input type="email" placeholder="jane.smith@acme.com">
+            </div>
+
+            <div class="form-group">
+              <label>Message</label>
+              <textarea placeholder="Tell us about your organisation's agentic AI deployment and governance needs."></textarea>
+            </div>
+
+            <button type="submit" class="form-submit">Send Enquiry</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-logo">COR<span>TAVEL</span></div>
+      <div class="footer-meta">
+        CORTAVEL v2.0 · Framework for Agentic AI Governance<br>
+        Protocol-agnostic · Board-ready · Auditable by design<br>
+        © 2026 CORTAVEL. All rights reserved.
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Scroll reveal
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry, i) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => entry.target.classList.add('visible'), i * 80);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    reveals.forEach(el => observer.observe(el));
+
+    // Nav background on scroll
+    const nav = document.querySelector('nav');
+    window.addEventListener('scroll', () => {
+      nav.style.background = window.scrollY > 60
+        ? 'rgba(13,27,46,0.97)'
+        : 'rgba(13,27,46,0.85)';
+    });
+
+    // Form submit
+    function handleSubmit(e) {
+      e.preventDefault();
+      const btn = e.target.querySelector('.form-submit');
+      btn.textContent = 'Enquiry Sent';
+      btn.style.background = '#5a8a5a';
+      btn.style.color = '#fff';
+      setTimeout(() => {
+        btn.textContent = 'Send Enquiry';
+        btn.style.background = '';
+        btn.style.color = '';
+      }, 3000);
+    }
+  </script>
+
+</body>
+</html>
