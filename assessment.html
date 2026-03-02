@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CORTAVEL Assessment Tool — Agentic AI Governance Maturity</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Instrument+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy: #0D1B2E;
+  --navy-mid: #13243D;
+  --navy-lt: #1C3050;
+  --gold: #C49A3C;
+  --gold-lt: #E2B96A;
+  --gold-dim: rgba(196,154,60,0.15);
+  --cream: #F5EFE4;
+  --cream-dk: #E8DFD0;
+  --white: #FFFFFF;
+  --dark: #1A1A2E;
+  --mid: #4A4A5A;
+  --slate: #8FA3BC;
+  --red: #C94040;
+  --amber: #D4883C;
+  --green: #2D8A5E;
+  --rule: rgba(196,154,60,0.25);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Instrument Sans',sans-serif;background:var(--navy);color:var(--cream);font-size:16px;line-height:1.6;min-height:100vh}
+
+/* ── NAV ── */
+.top-bar{position:fixed;top:0;left:0;right:0;z-index:100;height:60px;display:flex;align-items:center;justify-content:space-between;padding:0 2rem;background:rgba(13,27,46,0.95);backdrop-filter:blur(16px);border-bottom:1px solid var(--rule)}
+.top-brand{font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:700;color:var(--white);letter-spacing:0.12em;text-decoration:none}
+.top-brand span{color:var(--gold)}
+.top-meta{font-family:'DM Mono',monospace;font-size:0.65rem;color:var(--slate);text-transform:uppercase;letter-spacing:0.1em}
+
+/* ── LAYOUT ── */
+.app{max-width:960px;margin:0 auto;padding:80px 1.5rem 3rem}
+
+/* ── INTRO SCREEN ── */
+.intro{text-align:center;padding:4rem 0}
+.intro-badge{display:inline-block;font-family:'DM Mono',monospace;font-size:0.65rem;color:var(--gold);text-transform:uppercase;letter-spacing:0.15em;border:1px solid var(--rule);padding:0.3rem 1rem;margin-bottom:2rem}
+.intro h1{font-family:'Cormorant Garamond',serif;font-size:clamp(2rem,5vw,3rem);font-weight:700;color:var(--white);margin-bottom:0.8rem}
+.intro h1 em{color:var(--gold-lt);font-style:italic}
+.intro-rule{width:60px;height:2px;background:var(--gold);margin:1.5rem auto}
+.intro p{max-width:560px;margin:0 auto 1.5rem;color:var(--slate);line-height:1.7;font-size:0.95rem}
+.intro-fields{max-width:480px;margin:2rem auto 0;text-align:left}
+.field{margin-bottom:1.2rem}
+.field label{display:block;font-family:'DM Mono',monospace;font-size:0.63rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--slate);margin-bottom:0.4rem}
+.field input,.field select{width:100%;background:var(--navy-mid);border:1px solid rgba(143,163,188,0.2);color:var(--cream);font-family:'Instrument Sans',sans-serif;font-size:0.9rem;padding:0.7rem 1rem;outline:none;transition:border-color 0.2s}
+.field input:focus,.field select:focus{border-color:var(--gold)}
+.field input::placeholder{color:var(--slate)}
+.field select{cursor:pointer;appearance:none}
+.field select option{background:var(--navy-mid)}
+
+.btn{font-family:'DM Mono',monospace;font-size:0.72rem;letter-spacing:0.14em;text-transform:uppercase;padding:0.9rem 2.5rem;border:none;cursor:pointer;transition:all 0.2s;display:inline-block}
+.btn-gold{background:var(--gold);color:var(--navy)}
+.btn-gold:hover{background:var(--gold-lt);transform:translateY(-1px)}
+.btn-outline{background:transparent;color:var(--gold);border:1px solid var(--gold)}
+.btn-outline:hover{background:var(--gold);color:var(--navy)}
+.btn:disabled{opacity:0.4;cursor:not-allowed;transform:none}
+
+/* ── PROGRESS BAR ── */
+.progress-wrap{margin-bottom:2.5rem}
+.progress-label{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:0.6rem}
+.progress-domain{font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:700;color:var(--white)}
+.progress-count{font-family:'DM Mono',monospace;font-size:0.65rem;color:var(--slate);text-transform:uppercase;letter-spacing:0.1em}
+.progress-bar{height:3px;background:var(--navy-lt);position:relative;overflow:hidden}
+.progress-fill{height:100%;background:var(--gold);transition:width 0.4s ease}
+
+/* ── DOMAIN HEADER ── */
+.domain-header{margin-bottom:2rem;padding-bottom:1.5rem;border-bottom:1px solid var(--rule)}
+.domain-num{font-family:'DM Mono',monospace;font-size:0.65rem;color:var(--gold);text-transform:uppercase;letter-spacing:0.2em;margin-bottom:0.3rem}
+.domain-title{font-family:'Cormorant Garamond',serif;font-size:clamp(1.5rem,3vw,2rem);font-weight:700;color:var(--white);margin-bottom:0.5rem}
+.domain-desc{color:var(--slate);font-size:0.9rem;max-width:640px;line-height:1.7}
+
+/* ── QUESTION CARD ── */
+.question-card{background:var(--navy-mid);border:1px solid var(--rule);padding:2rem;margin-bottom:1.5rem;transition:border-color 0.3s}
+.question-card.answered{border-color:rgba(45,138,94,0.4)}
+.q-num{font-family:'DM Mono',monospace;font-size:0.6rem;color:var(--gold);text-transform:uppercase;letter-spacing:0.15em;margin-bottom:0.6rem}
+.q-text{font-size:1rem;color:var(--cream);font-weight:500;margin-bottom:1.2rem;line-height:1.5}
+.q-guidance{font-size:0.82rem;color:var(--slate);margin-bottom:1.2rem;font-style:italic;line-height:1.6}
+
+/* ── RATING SCALE ── */
+.rating-scale{display:flex;gap:0}
+.rating-option{flex:1;text-align:center;cursor:pointer;padding:0.8rem 0.3rem;border:1px solid var(--rule);border-right:none;transition:all 0.2s;position:relative}
+.rating-option:last-child{border-right:1px solid var(--rule)}
+.rating-option:hover{background:rgba(196,154,60,0.08)}
+.rating-option.selected{background:var(--gold);border-color:var(--gold)}
+.rating-option.selected+.rating-option{border-left-color:var(--gold)}
+.rating-val{font-family:'DM Mono',monospace;font-size:1rem;font-weight:700;color:var(--cream);display:block;margin-bottom:0.2rem}
+.rating-option.selected .rating-val{color:var(--navy)}
+.rating-label{font-size:0.62rem;color:var(--slate);text-transform:uppercase;letter-spacing:0.05em;line-height:1.3}
+.rating-option.selected .rating-label{color:var(--navy)}
+
+/* ── NAVIGATION ── */
+.nav-buttons{display:flex;justify-content:space-between;align-items:center;margin-top:2rem;padding-top:1.5rem;border-top:1px solid var(--rule)}
+
+/* ── RESULTS ── */
+.results{padding:2rem 0}
+.results-title{font-family:'Cormorant Garamond',serif;font-size:clamp(2rem,4vw,2.8rem);font-weight:700;color:var(--white);text-align:center;margin-bottom:0.5rem}
+.results-subtitle{text-align:center;color:var(--slate);font-size:0.95rem;margin-bottom:3rem}
+
+/* Heat map */
+.heatmap{margin-bottom:3rem}
+.heatmap-row{display:grid;grid-template-columns:200px 1fr 80px;gap:0;align-items:stretch;margin-bottom:2px}
+.heatmap-domain{background:var(--navy-mid);padding:1rem 1.2rem;display:flex;align-items:center;font-family:'Cormorant Garamond',serif;font-weight:700;font-size:0.95rem;color:var(--cream);border-right:2px solid var(--navy)}
+.heatmap-bar-wrap{background:var(--navy-mid);padding:0.8rem 1.2rem;display:flex;align-items:center}
+.heatmap-bar{height:28px;transition:width 0.8s ease;position:relative;min-width:2px}
+.heatmap-bar.level-1{background:var(--red)}
+.heatmap-bar.level-2{background:var(--amber)}
+.heatmap-bar.level-3{background:var(--gold)}
+.heatmap-bar.level-4{background:var(--green)}
+.heatmap-score{background:var(--navy-mid);padding:1rem 0.8rem;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:0.85rem;font-weight:700}
+.heatmap-score.level-1{color:var(--red)}
+.heatmap-score.level-2{color:var(--amber)}
+.heatmap-score.level-3{color:var(--gold)}
+.heatmap-score.level-4{color:var(--green)}
+
+/* Legend */
+.legend{display:flex;gap:2rem;justify-content:center;margin-bottom:3rem;flex-wrap:wrap}
+.legend-item{display:flex;align-items:center;gap:0.5rem;font-family:'DM Mono',monospace;font-size:0.65rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--slate)}
+.legend-dot{width:12px;height:12px}
+.legend-dot.l1{background:var(--red)}
+.legend-dot.l2{background:var(--amber)}
+.legend-dot.l3{background:var(--gold)}
+.legend-dot.l4{background:var(--green)}
+
+/* Overall score */
+.overall-card{text-align:center;background:var(--navy-mid);border:1px solid var(--rule);padding:2.5rem;margin-bottom:3rem}
+.overall-label{font-family:'DM Mono',monospace;font-size:0.65rem;color:var(--gold);text-transform:uppercase;letter-spacing:0.2em;margin-bottom:0.5rem}
+.overall-score{font-family:'Cormorant Garamond',serif;font-size:4rem;font-weight:700;line-height:1}
+.overall-max{font-family:'DM Mono',monospace;font-size:1rem;color:var(--slate)}
+.overall-level{font-size:1rem;color:var(--cream);margin-top:0.5rem;font-weight:600}
+
+/* Domain detail cards */
+.domain-result{background:var(--navy-mid);border:1px solid var(--rule);padding:2rem;margin-bottom:1.2rem}
+.domain-result-header{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:1rem}
+.domain-result-name{font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:700;color:var(--white)}
+.domain-result-score{font-family:'DM Mono',monospace;font-size:0.85rem;font-weight:700}
+.domain-result-bar{height:4px;background:var(--navy-lt);margin-bottom:1rem}
+.domain-result-fill{height:100%;transition:width 0.6s}
+.domain-result-detail{font-size:0.85rem;color:var(--slate);line-height:1.7}
+.domain-result-finding{margin-top:0.8rem;padding:0.8rem 1rem;background:rgba(196,154,60,0.08);border-left:2px solid var(--gold);font-size:0.85rem;color:var(--cream);line-height:1.6}
+
+/* Actions */
+.result-actions{display:flex;gap:1rem;justify-content:center;margin-top:2rem;flex-wrap:wrap}
+
+/* Print */
+@media print {
+  .top-bar,.nav-buttons,.result-actions,.intro,.btn{display:none!important}
+  body{background:#fff;color:#222}
+  .app{padding-top:0}
+  .results-title,.domain-result-name,.domain-title{color:#0D1B2E}
+  .results-subtitle,.domain-result-detail,.domain-desc{color:#444}
+  .heatmap-domain,.heatmap-bar-wrap,.heatmap-score,.domain-result,.overall-card{background:#f5f2ec;border-color:#ddd}
+  .progress-wrap{display:none}
+}
+
+/* Responsive */
+@media(max-width:700px){
+  .heatmap-row{grid-template-columns:120px 1fr 60px}
+  .heatmap-domain{font-size:0.8rem;padding:0.7rem}
+  .rating-label{display:none}
+  .rating-option{padding:0.8rem 0.2rem}
+  .intro-fields{padding:0 0.5rem}
+}
+
+/* Fade in */
+.fade-in{opacity:0;transform:translateY(16px);animation:fadeIn 0.5s forwards}
+@keyframes fadeIn{to{opacity:1;transform:translateY(0)}}
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+  <a href="/" class="top-brand">COR<span>TAVEL</span></a>
+  <div class="top-meta">Governance Assessment Tool</div>
+</div>
+
+<div class="app" id="app"></div>
+
+<script>
+// ═══════════════════════════════════════════════════════════
+// CORTAVEL ASSESSMENT DATA MODEL
+// ═══════════════════════════════════════════════════════════
+const DOMAINS = [
+  {
+    id: "delegation",
+    num: "01",
+    title: "Delegation Authorisation",
+    desc: "Defines who may instruct an agent and to what scope. Establishes the chain of accountable principals for every autonomous action.",
+    questions: [
+      {
+        id: "d1",
+        text: "Does your organisation maintain a formal register of which individuals or roles are authorised to deploy, configure, or instruct AI agents?",
+        guidance: "Consider whether there is a documented list of who can commission new AI agents, modify existing ones, or grant agents access to systems and data."
+      },
+      {
+        id: "d2",
+        text: "Are there defined scope boundaries for each AI agent — specifying what actions it can and cannot take autonomously?",
+        guidance: "Think about whether each deployed agent has a written mandate: what systems it can access, what decisions it can make, what financial thresholds apply."
+      },
+      {
+        id: "d3",
+        text: "Is there a documented chain of accountability linking every autonomous agent action back to a named human principal?",
+        guidance: "If an agent makes a decision that causes harm, can you trace it back to the person who authorised the agent to operate in that way?"
+      },
+      {
+        id: "d4",
+        text: "Do delegation authorities require periodic revalidation or renewal?",
+        guidance: "Are agent permissions reviewed on a schedule, or do they persist indefinitely once granted?"
+      },
+      {
+        id: "d5",
+        text: "Are delegation changes (new agents, expanded scope, revoked access) logged with timestamps and approver identity?",
+        guidance: "Consider whether your organisation maintains an audit trail of who changed agent permissions and when."
+      }
+    ]
+  },
+  {
+    id: "escalation",
+    num: "02",
+    title: "Escalation Thresholds",
+    desc: "Codified conditions under which an agent must pause, escalate, or abort. Prevents unchecked autonomous execution at high-consequence decision points.",
+    questions: [
+      {
+        id: "e1",
+        text: "Has your organisation defined specific conditions under which an AI agent must pause and escalate to a human decision-maker?",
+        guidance: "For example: financial thresholds, customer-facing communications, legal commitments, or decisions affecting personnel."
+      },
+      {
+        id: "e2",
+        text: "Are escalation thresholds calibrated differently based on the risk level or domain of the agent's activity?",
+        guidance: "A customer service chatbot and a financial trading agent should have different escalation triggers. Are yours differentiated?"
+      },
+      {
+        id: "e3",
+        text: "Is there a defined process for what happens when an escalation is triggered — including response time expectations and fallback procedures?",
+        guidance: "When an agent escalates, does someone know? Is there an SLA for human response? What happens if no human responds?"
+      },
+      {
+        id: "e4",
+        text: "Are escalation events logged and reviewed to identify patterns, near-misses, or threshold miscalibration?",
+        guidance: "Do you analyse escalation data to refine your thresholds over time, or are they set once and forgotten?"
+      },
+      {
+        id: "e5",
+        text: "Can agents be remotely paused or shut down immediately if they breach an escalation boundary?",
+        guidance: "Is there a kill switch or emergency halt mechanism for every deployed agent?"
+      }
+    ]
+  },
+  {
+    id: "audit",
+    num: "03",
+    title: "Audit Trail Standards",
+    desc: "Minimum requirements for action logging, intent capture, and chain-of-custody across multi-agent pipelines.",
+    questions: [
+      {
+        id: "a1",
+        text: "Does every AI agent action generate a timestamped, immutable log entry that captures the action taken, the input received, and the reasoning or model behind the decision?",
+        guidance: "Consider whether you could reconstruct why an agent made a specific decision six months after the fact."
+      },
+      {
+        id: "a2",
+        text: "Are you able to identify which data sources an AI agent used for any given decision?",
+        guidance: "BSI research found only 28% of organisations know what data their AI tools use. Can you trace data provenance for agent decisions?"
+      },
+      {
+        id: "a3",
+        text: "In multi-agent workflows, can you trace the full chain of decisions across all agents involved in a single outcome?",
+        guidance: "If Agent A passes a task to Agent B, which then triggers Agent C, can you see the complete decision chain?"
+      },
+      {
+        id: "a4",
+        text: "Are audit logs stored in a format that could be produced in regulatory proceedings without further processing or translation?",
+        guidance: "Could a regulator or auditor review your agent logs directly, or would they need significant interpretation?"
+      },
+      {
+        id: "a5",
+        text: "Is there a defined retention period and access control policy for agent audit trails?",
+        guidance: "Who can access agent logs? How long are they retained? Are they protected against tampering?"
+      }
+    ]
+  },
+  {
+    id: "interop",
+    num: "04",
+    title: "Protocol Interoperability",
+    desc: "Governance applies across agent architectures, orchestration protocols, and vendor platforms. Vendor-neutral by design.",
+    questions: [
+      {
+        id: "i1",
+        text: "Do your governance controls apply consistently across all AI agent platforms and vendors in use?",
+        guidance: "If you use agents from multiple providers (e.g., different LLM APIs, RPA tools, custom agents), do the same governance rules apply to all of them?"
+      },
+      {
+        id: "i2",
+        text: "Can your governance framework accommodate new agent architectures or orchestration protocols without requiring fundamental redesign?",
+        guidance: "If you adopted a new agent framework tomorrow, could your governance layer adapt, or would you need to start from scratch?"
+      },
+      {
+        id: "i3",
+        text: "Are your AI governance practices aligned with the regulatory requirements of all jurisdictions in which your organisation operates?",
+        guidance: "BSI found 60% feel equipped for multi-jurisdictional requirements, but only 53% are confident in compliance audits. Where do you stand?"
+      },
+      {
+        id: "i4",
+        text: "Do you have a process for assessing the governance implications when integrating third-party AI agents or services?",
+        guidance: "When a vendor deploys an AI agent within your systems, do you assess it against your governance standards before activation?"
+      },
+      {
+        id: "i5",
+        text: "Can governance metadata (delegation records, escalation logs, audit trails) be exchanged between systems in a standardised format?",
+        guidance: "Could you share governance data with a regulator, auditor, or partner in a structured, machine-readable format?"
+      }
+    ]
+  },
+  {
+    id: "attestation",
+    num: "05",
+    title: "Board Attestation Model",
+    desc: "Translates technical compliance into board-level declarations. Enables governance to be cited in annual reports, investor disclosures, and regulatory submissions.",
+    questions: [
+      {
+        id: "b1",
+        text: "Does your board (or a designated committee) receive regular, structured reporting on AI agent governance posture?",
+        guidance: "Not general AI updates — specific reporting on agent governance: delegation status, escalation activity, audit trail completeness, compliance posture."
+      },
+      {
+        id: "b2",
+        text: "Could your board currently sign an attestation statement declaring that AI agent governance is in place, tested, and current?",
+        guidance: "If a board member were asked to include a governance declaration in the annual report today, would they have the evidence to support it?"
+      },
+      {
+        id: "b3",
+        text: "Is there a defined cycle for board review and attestation of AI governance — not just ad hoc updates?",
+        guidance: "Annual? Quarterly? Is it scheduled and structured, or does it happen only when something goes wrong?"
+      },
+      {
+        id: "b4",
+        text: "Does your organisation assess the workforce impact of AI agent deployment as part of its governance reporting?",
+        guidance: "BSI found 39% of junior roles already cut due to AI. Is workforce impact documented, justified, and reviewed at board level?"
+      },
+      {
+        id: "b5",
+        text: "Would your AI governance documentation withstand scrutiny from an external auditor or regulator?",
+        guidance: "54% of business leaders say they would trust AI more if externally validated. Could your governance pass that test?"
+      }
+    ]
+  }
+];
+
+const LEVELS = [
+  { val: 1, label: "Not in\nplace", color: "var(--red)" },
+  { val: 2, label: "Ad hoc /\ninformal", color: "var(--amber)" },
+  { val: 3, label: "Defined\nprocess", color: "var(--gold)" },
+  { val: 4, label: "Operational\n& reviewed", color: "var(--green)" }
+];
+
+// ═══════════════════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════════════════
+let state = {
+  screen: "intro", // intro | assessment | results
+  currentDomain: 0,
+  answers: {},     // questionId -> score (1-4)
+  org: { name: "", sector: "", assessor: "" }
+};
+
+// ═══════════════════════════════════════════════════════════
+// RENDERING
+// ═══════════════════════════════════════════════════════════
+const app = document.getElementById("app");
+
+function render() {
+  if (state.screen === "intro") renderIntro();
+  else if (state.screen === "assessment") renderAssessment();
+  else if (state.screen === "results") renderResults();
+}
+
+function renderIntro() {
+  app.innerHTML = `
+    <div class="intro fade-in">
+      <div class="intro-badge">Assessment Tool · v2.0</div>
+      <h1>Agentic AI<br><em>Governance Maturity</em></h1>
+      <div class="intro-rule"></div>
+      <p>This assessment evaluates your organisation's governance readiness across CORTAVEL's five domains. Each question is scored on a four-point maturity scale. Results produce a governance gap heat map and domain-by-domain analysis.</p>
+      <p style="font-size:0.82rem;color:var(--slate)">25 questions · Approximately 20–30 minutes · All responses are confidential</p>
+      <div class="intro-fields">
+        <div class="field">
+          <label>Organisation Name</label>
+          <input type="text" id="org-name" placeholder="Acme Corporation" value="${state.org.name}">
+        </div>
+        <div class="field">
+          <label>Sector</label>
+          <select id="org-sector">
+            <option value="" ${!state.org.sector?'selected':''}>Select sector</option>
+            <option ${state.org.sector==='Financial Services'?'selected':''}>Financial Services</option>
+            <option ${state.org.sector==='Technology'?'selected':''}>Technology</option>
+            <option ${state.org.sector==='Healthcare / Pharma'?'selected':''}>Healthcare / Pharma</option>
+            <option ${state.org.sector==='Professional Services'?'selected':''}>Professional Services</option>
+            <option ${state.org.sector==='Manufacturing'?'selected':''}>Manufacturing</option>
+            <option ${state.org.sector==='Energy / Utilities'?'selected':''}>Energy / Utilities</option>
+            <option ${state.org.sector==='Retail / Consumer'?'selected':''}>Retail / Consumer</option>
+            <option ${state.org.sector==='Public Sector'?'selected':''}>Public Sector</option>
+            <option ${state.org.sector==='Other'?'selected':''}>Other</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Assessor Name</label>
+          <input type="text" id="org-assessor" placeholder="Jane Smith, CRO" value="${state.org.assessor}">
+        </div>
+        <div style="text-align:center;margin-top:2rem">
+          <button class="btn btn-gold" onclick="startAssessment()">Begin Assessment</button>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function renderAssessment() {
+  const domain = DOMAINS[state.currentDomain];
+  const totalQ = DOMAINS.reduce((s,d) => s + d.questions.length, 0);
+  const answeredQ = Object.keys(state.answers).length;
+  const domainAnswered = domain.questions.filter(q => state.answers[q.id]).length;
+  const prevQCount = DOMAINS.slice(0, state.currentDomain).reduce((s,d) => s + d.questions.length, 0);
+  const progressPct = ((prevQCount + domainAnswered) / totalQ * 100).toFixed(0);
+
+  let questionsHTML = domain.questions.map((q, qi) => {
+    const selected = state.answers[q.id] || 0;
+    const ratingsHTML = LEVELS.map(l => `
+      <div class="rating-option ${selected === l.val ? 'selected' : ''}" onclick="setAnswer('${q.id}', ${l.val})">
+        <span class="rating-val">${l.val}</span>
+        <span class="rating-label">${l.label.replace('\n','<br>')}</span>
+      </div>
+    `).join('');
+    return `
+      <div class="question-card ${selected ? 'answered' : ''} fade-in" style="animation-delay:${qi*0.06}s">
+        <div class="q-num">Question ${prevQCount + qi + 1} of ${totalQ}</div>
+        <div class="q-text">${q.text}</div>
+        <div class="q-guidance">${q.guidance}</div>
+        <div class="rating-scale">${ratingsHTML}</div>
+      </div>
+    `;
+  }).join('');
+
+  const isFirst = state.currentDomain === 0;
+  const isLast = state.currentDomain === DOMAINS.length - 1;
+  const allDomainAnswered = domainAnswered === domain.questions.length;
+
+  app.innerHTML = `
+    <div class="progress-wrap">
+      <div class="progress-label">
+        <span class="progress-domain">Domain ${domain.num}: ${domain.title}</span>
+        <span class="progress-count">${progressPct}% complete</span>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" style="width:${progressPct}%"></div></div>
+    </div>
+    <div class="domain-header fade-in">
+      <div class="domain-num">Domain ${domain.num} of 05</div>
+      <div class="domain-title">${domain.title}</div>
+      <div class="domain-desc">${domain.desc}</div>
+    </div>
+    ${questionsHTML}
+    <div class="nav-buttons">
+      <button class="btn btn-outline" onclick="prevDomain()" ${isFirst?'disabled':''}>← Previous Domain</button>
+      ${isLast
+        ? `<button class="btn btn-gold" onclick="showResults()" ${!allDomainAnswered?'disabled':''}>View Results</button>`
+        : `<button class="btn btn-gold" onclick="nextDomain()" ${!allDomainAnswered?'disabled':''}>Next Domain →</button>`
+      }
+    </div>
+  `;
+}
+
+function renderResults() {
+  const domainScores = DOMAINS.map(d => {
+    const scores = d.questions.map(q => state.answers[q.id] || 1);
+    const avg = scores.reduce((a,b) => a+b, 0) / scores.length;
+    return { ...d, avg: avg, scores };
+  });
+  const overallAvg = domainScores.reduce((s,d) => s + d.avg, 0) / domainScores.length;
+  const overallLevel = getLevel(overallAvg);
+  const dateStr = new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+
+  function getLevel(avg) {
+    if (avg < 1.5) return { label: "Critical — No governance in place", cls: "level-1" };
+    if (avg < 2.5) return { label: "Developing — Ad hoc, informal controls", cls: "level-2" };
+    if (avg < 3.5) return { label: "Established — Defined processes exist", cls: "level-3" };
+    return { label: "Mature — Operational and regularly reviewed", cls: "level-4" };
+  }
+
+  function getFindings(domain, avg) {
+    const findings = {
+      delegation: {
+        low: "Your organisation lacks formal delegation controls for AI agents. Autonomous actions cannot be attributed to accountable individuals. This is the highest-priority gap to address.",
+        mid: "Some delegation practices exist but are inconsistent. Formalise a delegation register and establish scope boundaries for all active agents.",
+        high: "Delegation authorisation is well-established. Focus on maintaining periodic revalidation and ensuring new agent deployments follow the same rigour."
+      },
+      escalation: {
+        low: "No escalation thresholds are defined. Agents can take unchecked autonomous action at high-consequence decision points. Implement basic escalation triggers immediately.",
+        mid: "Escalation processes are partially defined but not consistently calibrated to risk levels. Standardise thresholds and establish response time SLAs.",
+        high: "Escalation thresholds are operational. Continue refining through analysis of escalation event data and near-miss patterns."
+      },
+      audit: {
+        low: "Agent actions are not being logged to a standard that would withstand regulatory scrutiny. Implement minimum audit trail requirements across all agents.",
+        mid: "Audit trails exist but lack consistency across agent types or miss chain-of-custody for multi-agent workflows. Standardise logging formats and retention policies.",
+        high: "Audit trail standards are mature. Ensure cross-agent traceability and maintain readiness for regulatory production."
+      },
+      interop: {
+        low: "Governance controls are siloed by platform or vendor. New agent deployments introduce ungoverned risk. Establish platform-agnostic governance requirements.",
+        mid: "Some cross-platform governance exists but gaps remain, particularly around third-party agent integration and multi-jurisdictional compliance.",
+        high: "Interoperability governance is strong. Focus on maintaining adaptability as new agent architectures and regulatory requirements emerge."
+      },
+      attestation: {
+        low: "Board-level AI governance reporting is absent or irregular. Directors cannot currently attest to governance posture. Establish a minimum reporting cycle.",
+        mid: "Some board reporting occurs but lacks the structure and evidence base needed for formal attestation. Develop a governance dashboard and attestation template.",
+        high: "Board attestation readiness is high. Maintain the cycle and prepare for external validation or audit."
+      }
+    };
+    const key = avg < 2.0 ? "low" : avg < 3.0 ? "mid" : "high";
+    return findings[domain.id]?.[key] || "";
+  }
+
+  const heatmapHTML = domainScores.map(d => {
+    const lvl = getLevel(d.avg);
+    const pct = (d.avg / 4 * 100).toFixed(0);
+    return `
+      <div class="heatmap-row">
+        <div class="heatmap-domain">${d.title}</div>
+        <div class="heatmap-bar-wrap"><div class="heatmap-bar ${lvl.cls}" style="width:${pct}%"></div></div>
+        <div class="heatmap-score ${lvl.cls}">${d.avg.toFixed(1)}</div>
+      </div>
+    `;
+  }).join('');
+
+  const detailHTML = domainScores.map(d => {
+    const lvl = getLevel(d.avg);
+    const pct = (d.avg / 4 * 100).toFixed(0);
+    const finding = getFindings(d, d.avg);
+    const qDetail = d.questions.map((q, qi) => {
+      const score = d.scores[qi];
+      const lbl = LEVELS[score-1].label.replace('\n',' ');
+      return `<span style="color:var(--slate);font-size:0.8rem">Q${qi+1}: <strong style="color:var(--cream)">${score}/4</strong> (${lbl})</span>`;
+    }).join(' &nbsp;·&nbsp; ');
+    return `
+      <div class="domain-result fade-in">
+        <div class="domain-result-header">
+          <div class="domain-result-name">Domain ${d.num}: ${d.title}</div>
+          <div class="domain-result-score ${lvl.cls}">${d.avg.toFixed(1)} / 4.0</div>
+        </div>
+        <div class="domain-result-bar"><div class="domain-result-fill ${lvl.cls}" style="width:${pct}%"></div></div>
+        <div class="domain-result-detail">${qDetail}</div>
+        <div class="domain-result-finding">${finding}</div>
+      </div>
+    `;
+  }).join('');
+
+  app.innerHTML = `
+    <div class="results fade-in">
+      <div style="text-align:center;margin-bottom:0.5rem">
+        <span class="intro-badge">Assessment Complete</span>
+      </div>
+      <div class="results-title">Governance Gap Heat Map</div>
+      <div class="results-subtitle">${state.org.name || 'Organisation'}${state.org.sector ? ' · '+state.org.sector : ''} · ${dateStr}</div>
+
+      <div class="overall-card">
+        <div class="overall-label">Overall Governance Maturity</div>
+        <div class="overall-score ${overallLevel.cls}">${overallAvg.toFixed(1)} <span class="overall-max">/ 4.0</span></div>
+        <div class="overall-level">${overallLevel.label}</div>
+      </div>
+
+      <div class="heatmap">
+        ${heatmapHTML}
+      </div>
+
+      <div class="legend">
+        <div class="legend-item"><div class="legend-dot l1"></div>Not in place (1.0–1.4)</div>
+        <div class="legend-item"><div class="legend-dot l2"></div>Ad hoc (1.5–2.4)</div>
+        <div class="legend-item"><div class="legend-dot l3"></div>Defined (2.5–3.4)</div>
+        <div class="legend-item"><div class="legend-dot l4"></div>Operational (3.5–4.0)</div>
+      </div>
+
+      <h2 style="font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:700;color:var(--white);margin-bottom:1.5rem">Domain Analysis & Recommendations</h2>
+      ${detailHTML}
+
+      <div class="result-actions">
+        <button class="btn btn-gold" onclick="printResults()">Print / Save as PDF</button>
+        <button class="btn btn-outline" onclick="resetAssessment()">Start New Assessment</button>
+      </div>
+
+      <div style="text-align:center;margin-top:3rem;padding-top:2rem;border-top:1px solid var(--rule)">
+        <p style="font-family:'DM Mono',monospace;font-size:0.65rem;color:var(--slate);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.5rem">Assessment conducted using</p>
+        <p style="font-family:'Cormorant Garamond',serif;font-size:1.3rem;color:var(--white);font-weight:700;letter-spacing:0.1em">COR<span style="color:var(--gold)">TAVEL</span></p>
+        <p style="font-size:0.8rem;color:var(--slate);margin-top:0.3rem">The governance standard for AI you can't see.</p>
+        <p style="font-family:'DM Mono',monospace;font-size:0.6rem;color:var(--slate);margin-top:1rem">Assessed by: ${state.org.assessor || 'Not specified'} · ${dateStr}</p>
+      </div>
+    </div>
+  `;
+}
+
+// ═══════════════════════════════════════════════════════════
+// ACTIONS
+// ═══════════════════════════════════════════════════════════
+function startAssessment() {
+  state.org.name = document.getElementById('org-name').value.trim();
+  state.org.sector = document.getElementById('org-sector').value;
+  state.org.assessor = document.getElementById('org-assessor').value.trim();
+  state.screen = "assessment";
+  state.currentDomain = 0;
+  window.scrollTo(0, 0);
+  render();
+}
+
+function setAnswer(qid, val) {
+  state.answers[qid] = val;
+  render();
+}
+
+function nextDomain() {
+  if (state.currentDomain < DOMAINS.length - 1) {
+    state.currentDomain++;
+    window.scrollTo(0, 0);
+    render();
+  }
+}
+
+function prevDomain() {
+  if (state.currentDomain > 0) {
+    state.currentDomain--;
+    window.scrollTo(0, 0);
+    render();
+  }
+}
+
+function showResults() {
+  state.screen = "results";
+  window.scrollTo(0, 0);
+  render();
+}
+
+function printResults() {
+  window.print();
+}
+
+function resetAssessment() {
+  state = { screen: "intro", currentDomain: 0, answers: {}, org: { name: "", sector: "", assessor: "" } };
+  window.scrollTo(0, 0);
+  render();
+}
+
+// ═══════════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════════
+render();
+</script>
+</body>
+</html>
