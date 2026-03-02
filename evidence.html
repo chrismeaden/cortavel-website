@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Evidence — CORTAVEL | AI Governance Framework</title>
+    <meta name="description" content="Independent research from BSI's 2025 Trust in AI report confirms the governance gap CORTAVEL was built to address. 76% of organisations lack AI governance programmes.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Instrument+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --navy: #0D1B2E;
+            --navy-light: #162B45;
+            --navy-mid: #1A3352;
+            --gold: #C49A3C;
+            --gold-light: #D4AF5C;
+            --gold-dim: rgba(196, 154, 60, 0.15);
+            --cream: #F5EFE4;
+            --cream-dark: #E8DFD0;
+            --white: #FFFFFF;
+            --dark-text: #1A1A2E;
+            --mid-text: #4A4A5A;
+            --light-text: #8A8A9A;
+            --alert-red: #C94040;
+            --success-green: #2D8A5E;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Instrument Sans', sans-serif;
+            color: var(--dark-text);
+            background: var(--cream);
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ─── NAV ─── */
+        nav {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+            background: var(--navy);
+            border-bottom: 1px solid rgba(196, 154, 60, 0.2);
+            padding: 0 2rem;
+            height: 60px;
+            display: flex; align-items: center; justify-content: space-between;
+        }
+        .nav-brand {
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 700; font-size: 1.4rem;
+            color: var(--cream);
+            text-decoration: none;
+            letter-spacing: 0.05em;
+        }
+        .nav-link {
+            font-family: 'DM Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--gold);
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            transition: color 0.3s;
+        }
+        .nav-link:hover { color: var(--cream); }
+
+        /* ─── HERO ─── */
+        .hero {
+            background: var(--navy);
+            padding: 10rem 2rem 5rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero::before {
+            content: '';
+            position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background: radial-gradient(ellipse at 70% 20%, rgba(196, 154, 60, 0.06) 0%, transparent 60%),
+                        radial-gradient(ellipse at 20% 80%, rgba(196, 154, 60, 0.04) 0%, transparent 50%);
+        }
+        .hero-inner {
+            max-width: 900px; margin: 0 auto;
+            position: relative; z-index: 1;
+        }
+        .hero-badge {
+            display: inline-block;
+            font-family: 'DM Mono', monospace;
+            font-size: 0.7rem;
+            color: var(--gold);
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            border: 1px solid rgba(196, 154, 60, 0.3);
+            padding: 0.4rem 1rem;
+            margin-bottom: 2rem;
+            opacity: 0; animation: fadeUp 0.8s 0.2s forwards;
+        }
+        .hero h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(2.4rem, 5vw, 3.6rem);
+            font-weight: 700;
+            color: var(--cream);
+            line-height: 1.15;
+            margin-bottom: 1.5rem;
+            opacity: 0; animation: fadeUp 0.8s 0.4s forwards;
+        }
+        .hero h1 span { color: var(--gold); }
+        .hero-sub {
+            font-size: 1.1rem;
+            color: var(--light-text);
+            line-height: 1.7;
+            max-width: 680px;
+            opacity: 0; animation: fadeUp 0.8s 0.6s forwards;
+        }
+        .hero-divider {
+            width: 60px; height: 2px;
+            background: var(--gold);
+            margin: 2rem 0;
+            opacity: 0; animation: fadeUp 0.8s 0.5s forwards;
+        }
+        .hero-source {
+            font-family: 'DM Mono', monospace;
+            font-size: 0.72rem;
+            color: rgba(138, 138, 154, 0.7);
+            margin-top: 2.5rem;
+            opacity: 0; animation: fadeUp 0.8s 0.8s forwards;
+        }
+
+        /* ─── SECTION COMMON ─── */
+        section { padding: 5rem 2rem; }
+        .container { max-width: 1080px; margin: 0 auto; }
+        .section-label {
+            font-family: 'DM Mono', monospace;
+            font-size: 0.7rem;
+            color: var(--gold);
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            margin-bottom: 0.8rem;
+        }
+        .section-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(1.8rem, 3.5vw, 2.4rem);
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 1rem;
+        }
+        .section-subtitle {
+            font-size: 1rem;
+            color: var(--mid-text);
+            line-height: 1.7;
+            max-width: 640px;
+            margin-bottom: 3rem;
+        }
+
+        /* ─── STAT CARDS ─── */
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        .stat-card {
+            background: var(--white);
+            border-top: 3px solid var(--gold);
+            padding: 2rem 1.8rem;
+            position: relative;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(13, 27, 46, 0.08);
+        }
+        .stat-number {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 3.2rem;
+            font-weight: 700;
+            color: var(--alert-red);
+            line-height: 1;
+            margin-bottom: 0.6rem;
+        }
+        .stat-card.positive .stat-number { color: var(--navy); }
+        .stat-label {
+            font-size: 0.92rem;
+            color: var(--mid-text);
+            line-height: 1.5;
+        }
+
+        /* ─── DARK SECTION ─── */
+        .dark-section {
+            background: var(--navy);
+            color: var(--cream);
+        }
+        .dark-section .section-title { color: var(--cream); }
+        .dark-section .section-subtitle { color: var(--light-text); }
+
+        /* ─── TWO-COLUMN CONTRAST ─── */
+        .contrast-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0;
+        }
+        .contrast-col {
+            padding: 2.5rem;
+        }
+        .contrast-col.left {
+            background: var(--cream);
+            border-right: 2px solid var(--gold);
+        }
+        .contrast-col.right {
+            background: var(--navy);
+            color: var(--cream);
+        }
+        .contrast-col h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+        }
+        .contrast-col.left h3 { color: var(--mid-text); }
+        .contrast-col.right h3 { color: var(--gold); }
+        .contrast-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.8rem;
+            margin-bottom: 1rem;
+            font-size: 0.92rem;
+            line-height: 1.5;
+        }
+        .contrast-icon {
+            flex-shrink: 0;
+            width: 20px; height: 20px;
+            margin-top: 2px;
+        }
+        .contrast-col.left .contrast-icon { color: var(--mid-text); }
+        .contrast-col.right .contrast-icon { color: var(--gold); }
+        .contrast-footer {
+            background: var(--navy-light);
+            padding: 1.2rem 2.5rem;
+            font-size: 0.85rem;
+            color: var(--gold);
+            font-weight: 600;
+            grid-column: 1 / -1;
+            text-align: center;
+        }
+
+        /* ─── DOMAIN MAPPING TABLE ─── */
+        .mapping-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+        .mapping-table thead th {
+            background: var(--navy);
+            color: var(--cream);
+            font-family: 'DM Mono', monospace;
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            padding: 1rem 1.2rem;
+            text-align: left;
+        }
+        .mapping-table thead th:nth-child(2) {
+            color: var(--gold);
+            text-align: center;
+        }
+        .mapping-table tbody td {
+            padding: 1rem 1.2rem;
+            border-bottom: 1px solid var(--cream-dark);
+            font-size: 0.92rem;
+            vertical-align: middle;
+        }
+        .mapping-table tbody tr:nth-child(even) td {
+            background: rgba(196, 154, 60, 0.05);
+        }
+        .mapping-table tbody td:nth-child(2) {
+            text-align: center;
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 700;
+            font-size: 1.3rem;
+            color: var(--navy);
+        }
+        .mapping-table tbody td:nth-child(3) {
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 700;
+            color: var(--gold);
+            font-size: 1rem;
+        }
+
+        /* ─── FIVE DOMAINS ─── */
+        .domains-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 1rem;
+        }
+        .domain-card {
+            background: var(--navy-light);
+            padding: 1.5rem 1.2rem;
+            text-align: center;
+            border-top: 3px solid var(--gold);
+            transition: transform 0.3s;
+        }
+        .domain-card:hover { transform: translateY(-4px); }
+        .domain-icon {
+            font-size: 1.8rem;
+            margin-bottom: 0.8rem;
+        }
+        .domain-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 700;
+            font-size: 1rem;
+            color: var(--gold);
+            margin-bottom: 0.6rem;
+            line-height: 1.3;
+        }
+        .domain-desc {
+            font-size: 0.78rem;
+            color: var(--light-text);
+            line-height: 1.5;
+        }
+
+        /* ─── CTA SECTION ─── */
+        .cta-section {
+            background: var(--navy);
+            padding: 5rem 2rem;
+            text-align: center;
+            position: relative;
+        }
+        .cta-section::before {
+            content: '';
+            position: absolute; top: 0; left: 0; right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+        }
+        .cta-stat {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(3rem, 8vw, 5rem);
+            font-weight: 700;
+            color: var(--gold);
+            line-height: 1;
+            margin-bottom: 0.5rem;
+        }
+        .cta-stat-label {
+            font-size: 1.1rem;
+            color: var(--cream);
+            margin-bottom: 2.5rem;
+        }
+        .cta-divider {
+            width: 60px; height: 2px;
+            background: var(--gold);
+            margin: 0 auto 2.5rem;
+        }
+        .cta-text {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.6rem;
+            font-weight: 600;
+            color: var(--cream);
+            max-width: 600px;
+            margin: 0 auto 2.5rem;
+            line-height: 1.4;
+        }
+        .cta-btn {
+            display: inline-block;
+            font-family: 'DM Mono', monospace;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: var(--navy);
+            background: var(--gold);
+            padding: 0.9rem 2.5rem;
+            text-decoration: none;
+            transition: background 0.3s, transform 0.2s;
+        }
+        .cta-btn:hover {
+            background: var(--gold-light);
+            transform: translateY(-2px);
+        }
+
+        /* ─── RISK CALLOUTS ─── */
+        .risk-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            align-items: start;
+        }
+        .risk-stats { display: flex; flex-direction: column; gap: 1.5rem; }
+        .risk-stat {
+            display: flex;
+            align-items: flex-start;
+            gap: 1.2rem;
+        }
+        .risk-stat-number {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.4rem;
+            font-weight: 700;
+            color: var(--alert-red);
+            line-height: 1;
+            flex-shrink: 0;
+            min-width: 80px;
+        }
+        .risk-stat-number.gold { color: var(--gold); }
+        .risk-stat-desc {
+            font-size: 0.92rem;
+            line-height: 1.5;
+            color: var(--cream);
+            padding-top: 0.3rem;
+        }
+        .risk-card {
+            background: var(--navy-light);
+            border-left: 3px solid var(--gold);
+            padding: 2rem;
+        }
+        .risk-card h4 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.1rem;
+            color: var(--gold);
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+        .risk-card li {
+            font-size: 0.88rem;
+            color: var(--cream);
+            line-height: 1.6;
+            margin-bottom: 0.4rem;
+            list-style: none;
+            padding-left: 1.2rem;
+            position: relative;
+        }
+        .risk-card li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: var(--gold);
+        }
+
+        /* ─── TRUST CARDS ─── */
+        .trust-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        .trust-card {
+            padding: 2.5rem;
+            text-align: center;
+        }
+        .trust-card.navy { background: var(--navy); }
+        .trust-card.gold { background: var(--gold); }
+        .trust-number {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 4rem;
+            font-weight: 700;
+            line-height: 1;
+            margin-bottom: 0.8rem;
+        }
+        .trust-card.navy .trust-number { color: var(--gold); }
+        .trust-card.gold .trust-number { color: var(--navy); }
+        .trust-label {
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+        .trust-card.navy .trust-label { color: var(--cream); }
+        .trust-card.gold .trust-label { color: var(--navy); }
+        .trust-cta-card {
+            background: var(--white);
+            border-left: 3px solid var(--gold);
+            padding: 1.8rem 2rem;
+            font-size: 0.95rem;
+            color: var(--dark-text);
+            line-height: 1.7;
+        }
+
+        /* ─── FOOTER ─── */
+        footer {
+            background: var(--navy-light);
+            padding: 2rem;
+            text-align: center;
+        }
+        footer p {
+            font-family: 'DM Mono', monospace;
+            font-size: 0.7rem;
+            color: var(--light-text);
+            letter-spacing: 0.05em;
+        }
+        footer a { color: var(--gold); text-decoration: none; }
+
+        /* ─── ANIMATIONS ─── */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.7s, transform 0.7s;
+        }
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ─── RESPONSIVE ─── */
+        @media (max-width: 900px) {
+            .contrast-grid { grid-template-columns: 1fr; }
+            .domains-grid { grid-template-columns: repeat(2, 1fr); }
+            .domains-grid .domain-card:last-child { grid-column: 1 / -1; max-width: 50%; margin: 0 auto; }
+            .risk-grid { grid-template-columns: 1fr; }
+            .trust-grid { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 600px) {
+            .hero { padding: 8rem 1.5rem 4rem; }
+            section { padding: 3.5rem 1.5rem; }
+            .stat-grid { grid-template-columns: 1fr; }
+            .domains-grid { grid-template-columns: 1fr; }
+            .domains-grid .domain-card:last-child { max-width: 100%; }
+            .contrast-col { padding: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <a href="/" class="nav-brand">CORTAVEL</a>
+        <a href="/#contact" class="nav-link">Get in touch →</a>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="hero-inner">
+            <div class="hero-badge">Market Evidence · 2025</div>
+            <h1>76% of organisations lack<br>AI governance.<br><span>The window to lead is now.</span></h1>
+            <div class="hero-divider"></div>
+            <p class="hero-sub">
+                BSI's 2025 "Trust in AI" report surveyed 850+ business leaders across eight countries and analysed 123 corporate annual reports. Their findings confirm the governance gap that CORTAVEL was built to address — and reveal why agentic AI demands a fundamentally different approach to oversight.
+            </p>
+            <p class="hero-source">Source: BSI — Trust in AI: Grounded in Governance (v1.0.0, 2025)</p>
+        </div>
+    </section>
+
+    <!-- THE GOVERNANCE GAP -->
+    <section>
+        <div class="container reveal">
+            <p class="section-label">The Governance Gap</p>
+            <h2 class="section-title">AI investment is accelerating.<br>Oversight is standing still.</h2>
+            <p class="section-subtitle">
+                Business leaders are racing to deploy AI — but the governance structures needed to manage autonomous systems remain critically underdeveloped.
+            </p>
+            <div class="stat-grid">
+                <div class="stat-card">
+                    <div class="stat-number">24%</div>
+                    <div class="stat-label">have an AI governance programme in place. For large businesses, this rises to just 34%.</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">28%</div>
+                    <div class="stat-label">know what data sources their business uses to train or deploy its AI tools — down from 35% six months prior.</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">47%</div>
+                    <div class="stat-label">say AI use is controlled by formal processes. A quarter admit employee AI use is not monitored at all.</div>
+                </div>
+            </div>
+            <div class="stat-grid">
+                <div class="stat-card">
+                    <div class="stat-number">30%</div>
+                    <div class="stat-label">have a risk assessment process to determine the level of risk being introduced by AI tools.</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">32%</div>
+                    <div class="stat-label">have a process for logging issues, flagging concerns or inaccuracies with AI tools.</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">35%</div>
+                    <div class="stat-label">have a standardised way of assessing whether an AI tool is acting as intended.</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- INVESTMENT VS GOVERNANCE -->
+    <section class="dark-section">
+        <div class="container reveal">
+            <p class="section-label">The Paradox</p>
+            <h2 class="section-title">Investment is surging. Confidence is falling.</h2>
+            <p class="section-subtitle">
+                While 62% of leaders expect to increase AI investment next year, the metrics that should underpin that confidence are heading in the wrong direction.
+            </p>
+            <div class="stat-grid">
+                <div class="stat-card positive" style="background: var(--navy-light); border-top-color: var(--gold);">
+                    <div class="stat-number" style="color: var(--gold);">62%</div>
+                    <div class="stat-label" style="color: var(--cream);">expect to increase AI investment in the next year</div>
+                </div>
+                <div class="stat-card positive" style="background: var(--navy-light); border-top-color: var(--gold);">
+                    <div class="stat-number" style="color: var(--gold);">65%</div>
+                    <div class="stat-label" style="color: var(--cream);">say AI has delivered tangible benefits — but this has fallen from 77% in just six months</div>
+                </div>
+                <div class="stat-card" style="background: var(--navy-light); border-top-color: var(--alert-red);">
+                    <div class="stat-number">43%</div>
+                    <div class="stat-label" style="color: var(--cream);">say AI investment has taken resources from other projects in the last 12 months</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- WHY AGENTIC AI IS DIFFERENT -->
+    <section>
+        <div class="container reveal">
+            <p class="section-label">The Agentic Shift</p>
+            <h2 class="section-title">Traditional AI governance assumes a human in the loop.<br>Agentic AI operates without one.</h2>
+            <p class="section-subtitle">
+                BSI found that transparency is twice as strong as accountability in corporate AI disclosures. Agentic systems demand the reverse — pre-authorised boundaries, not post-hoc explanations.
+            </p>
+        </div>
+        <div class="container reveal">
+            <div class="contrast-grid">
+                <div class="contrast-col left">
+                    <h3>Traditional AI</h3>
+                    <div class="contrast-item"><span class="contrast-icon">○</span> Human reviews every output</div>
+                    <div class="contrast-item"><span class="contrast-icon">○</span> Decisions require approval before action</div>
+                    <div class="contrast-item"><span class="contrast-icon">○</span> Errors caught before they reach customers</div>
+                    <div class="contrast-item"><span class="contrast-icon">○</span> Audit trail = human sign-off records</div>
+                    <div class="contrast-item"><span class="contrast-icon">○</span> Governance = retrospective review</div>
+                </div>
+                <div class="contrast-col right">
+                    <h3>Agentic AI</h3>
+                    <div class="contrast-item"><span class="contrast-icon">◆</span> Acts autonomously without human review</div>
+                    <div class="contrast-item"><span class="contrast-icon">◆</span> Makes and executes its own decisions</div>
+                    <div class="contrast-item"><span class="contrast-icon">◆</span> Errors discovered after impact</div>
+                    <div class="contrast-item"><span class="contrast-icon">◆</span> Audit trail = delegation lineage chains</div>
+                    <div class="contrast-item"><span class="contrast-icon">◆</span> Governance = pre-authorised boundaries</div>
+                </div>
+                <div class="contrast-footer">
+                    This is why CORTAVEL exists. General-purpose AI standards don't address autonomous decision-making at speed.
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- DOMAIN MAPPING -->
+    <section class="dark-section">
+        <div class="container reveal">
+            <p class="section-label">Direct Alignment</p>
+            <h2 class="section-title">Every BSI finding maps to a CORTAVEL domain.</h2>
+            <p class="section-subtitle">
+                CORTAVEL's five governance domains were designed to address exactly the gaps that BSI's research has now quantified.
+            </p>
+
+            <!-- Five domains -->
+            <div class="domains-grid" style="margin-bottom: 3rem;">
+                <div class="domain-card">
+                    <div class="domain-icon">⟐</div>
+                    <div class="domain-title">Delegation<br>Authorisation</div>
+                    <div class="domain-desc">Who can authorise which agent to act, under what constraints, and with what scope.</div>
+                </div>
+                <div class="domain-card">
+                    <div class="domain-icon">⚑</div>
+                    <div class="domain-title">Escalation<br>Thresholds</div>
+                    <div class="domain-desc">When must an agent pause and escalate to a human? Define the triggers and limits.</div>
+                </div>
+                <div class="domain-card">
+                    <div class="domain-icon">⊞</div>
+                    <div class="domain-title">Audit Trail<br>Standards</div>
+                    <div class="domain-desc">Every agent decision recorded with full provenance, lineage, and data source tracking.</div>
+                </div>
+                <div class="domain-card">
+                    <div class="domain-icon">⬡</div>
+                    <div class="domain-title">Protocol<br>Interoperability</div>
+                    <div class="domain-desc">Cross-border, cross-standard coordination ensuring agents work within jurisdictional rules.</div>
+                </div>
+                <div class="domain-card">
+                    <div class="domain-icon">◎</div>
+                    <div class="domain-title">Board<br>Attestation</div>
+                    <div class="domain-desc">Board-level sign-off cycle confirming governance is in place, tested, and current.</div>
+                </div>
+            </div>
+
+            <!-- Mapping table -->
+            <div style="overflow-x: auto;">
+                <table class="mapping-table">
+                    <thead>
+                        <tr>
+                            <th>BSI Finding</th>
+                            <th>Stat</th>
+                            <th>CORTAVEL Domain</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="color: var(--cream);">Employee AI use not monitored</td>
+                            <td style="color: var(--gold);">24%</td>
+                            <td>Delegation Authorisation</td>
+                        </tr>
+                        <tr>
+                            <td style="color: var(--cream);">No process for logging AI issues</td>
+                            <td style="color: var(--gold);">68%</td>
+                            <td>Escalation Thresholds</td>
+                        </tr>
+                        <tr>
+                            <td style="color: var(--cream);">Don't know AI data sources</td>
+                            <td style="color: var(--gold);">72%</td>
+                            <td>Audit Trail Standards</td>
+                        </tr>
+                        <tr>
+                            <td style="color: var(--cream);">Not confident in cross-jurisdiction compliance</td>
+                            <td style="color: var(--gold);">40%</td>
+                            <td>Protocol Interoperability</td>
+                        </tr>
+                        <tr>
+                            <td style="color: var(--cream);">No AI governance programme</td>
+                            <td style="color: var(--gold);">76%</td>
+                            <td>Board Attestation Model</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- RISK OF INACTION -->
+    <section class="dark-section" style="background: var(--navy-mid);">
+        <div class="container reveal">
+            <p class="section-label">The Cost of Inaction</p>
+            <h2 class="section-title" style="color: var(--cream);">What happens when governance doesn't keep pace.</h2>
+            <p class="section-subtitle" style="margin-bottom: 2.5rem;">
+                BSI's data reveals organisations are becoming dependent on AI tools without the resilience planning to match.
+            </p>
+            <div class="risk-grid">
+                <div class="risk-stats">
+                    <div class="risk-stat">
+                        <div class="risk-stat-number">48%</div>
+                        <div class="risk-stat-desc">say their business could not continue operating uninterrupted if AI tools went down</div>
+                    </div>
+                    <div class="risk-stat">
+                        <div class="risk-stat-number">32%</div>
+                        <div class="risk-stat-desc">agree AI has already been a source of risk or area of weakness for their business</div>
+                    </div>
+                    <div class="risk-stat">
+                        <div class="risk-stat-number gold">39%</div>
+                        <div class="risk-stat-desc">say junior or entry-level roles have already been cut due to AI efficiencies — with 43% expecting further reductions</div>
+                    </div>
+                </div>
+                <div class="risk-card">
+                    <h4>Without governance, organisations face:</h4>
+                    <ul>
+                        <li>Undetected autonomous AI errors at scale</li>
+                        <li>Regulatory non-compliance across jurisdictions</li>
+                        <li>No accountability chain for agent decisions</li>
+                        <li>Business continuity failures with no human fallback</li>
+                        <li>Reputational damage from ungoverned AI actions</li>
+                        <li>Investor and stakeholder confidence erosion</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- DEMAND FOR ASSURANCE -->
+    <section>
+        <div class="container reveal">
+            <p class="section-label">The Opportunity</p>
+            <h2 class="section-title">Business leaders are asking for what CORTAVEL provides.</h2>
+            <p class="section-subtitle">
+                The demand for transparency, external validation, and standards-based governance is clear. Early movers gain credibility.
+            </p>
+            <div class="trust-grid">
+                <div class="trust-card navy">
+                    <div class="trust-number">67%</div>
+                    <div class="trust-label">would trust AI more with increased transparency around the data it uses</div>
+                </div>
+                <div class="trust-card gold">
+                    <div class="trust-number">54%</div>
+                    <div class="trust-label">would trust AI more if validated by an external organisation</div>
+                </div>
+            </div>
+            <div class="trust-cta-card">
+                CORTAVEL positions your organisation to meet this demand. As the first governance framework built specifically for agentic AI, it provides the structure boards need to demonstrate responsible deployment — through delegation boundaries, escalation protocols, audit standards, and a formal attestation cycle — before regulators mandate it.
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta-section">
+        <div class="container">
+            <div class="cta-stat reveal">76%</div>
+            <p class="cta-stat-label reveal">of organisations lack AI governance</p>
+            <div class="cta-divider reveal"></div>
+            <p class="cta-text reveal">The governance standard<br>for AI you can't see.</p>
+            <a href="/#contact" class="cta-btn reveal">Talk to us about CORTAVEL</a>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <p>© 2026 CORTAVEL · <a href="/">cortavel.com</a> · All data sourced from BSI "Trust in AI: Grounded in Governance" (2025)</p>
+    </footer>
+
+    <!-- SCROLL REVEAL -->
+    <script>
+        const reveals = document.querySelectorAll('.reveal');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.15 });
+        reveals.forEach(el => observer.observe(el));
+    </script>
+
+</body>
+</html>
