@@ -38,29 +38,44 @@
         /* ─── NAV ─── */
         nav {
             position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-            background: var(--navy);
-            border-bottom: 1px solid rgba(196, 154, 60, 0.2);
-            padding: 0 2rem;
-            height: 60px;
+            background: rgba(13,27,46,0.85);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(196, 154, 60, 0.25);
+            padding: 0 4vw;
+            height: 72px;
             display: flex; align-items: center; justify-content: space-between;
         }
         .nav-brand {
             font-family: 'Cormorant Garamond', serif;
-            font-weight: 700; font-size: 1.4rem;
-            color: var(--cream);
+            font-weight: 600; font-size: 1.5rem;
+            color: var(--white);
             text-decoration: none;
-            letter-spacing: 0.05em;
+            letter-spacing: 0.18em;
+        }
+        .nav-right {
+            display: flex;
+            gap: 2.5rem;
+            align-items: center;
         }
         .nav-link {
             font-family: 'DM Mono', monospace;
-            font-size: 0.75rem;
-            color: var(--gold);
+            font-size: 0.7rem;
+            color: #B8CADE;
             text-decoration: none;
             text-transform: uppercase;
-            letter-spacing: 0.1em;
-            transition: color 0.3s;
+            letter-spacing: 0.12em;
+            transition: color 0.2s;
         }
-        .nav-link:hover { color: var(--cream); }
+        .nav-link:hover { color: #E2B96A; }
+        .nav-cta-btn {
+            color: var(--navy) !important;
+            background: var(--gold);
+            padding: 0.5rem 1.2rem;
+        }
+        .nav-cta-btn:hover { background: #E2B96A !important; }
+        @media (max-width: 900px) {
+            .nav-right { display: none; }
+        }
 
         /* ─── HERO ─── */
         .hero {
@@ -516,8 +531,14 @@
 
     <!-- NAV -->
     <nav>
-        <a href="/" class="nav-brand">CORTAVEL</a>
-        <a href="/#contact" class="nav-link">Get in touch →</a>
+        <a href="/" class="nav-brand">COR<span style="color: var(--gold);">TAVEL</span></a>
+        <div class="nav-right">
+            <a href="/#problem" class="nav-link">The Gap</a>
+            <a href="/#framework" class="nav-link">Framework</a>
+            <a href="/evidence.html" class="nav-link" style="color: var(--gold);">Evidence</a>
+            <a href="/#about" class="nav-link">About</a>
+            <a href="/#contact" class="nav-link nav-cta-btn">Enquire</a>
+        </div>
     </nav>
 
     <!-- HERO -->
